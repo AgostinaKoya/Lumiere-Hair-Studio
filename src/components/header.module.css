@@ -1,0 +1,70 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@600&display=swap");
+
+/* HEADER */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #fffffff1;
+  border-bottom: 1px solid #e8ddd4;
+}
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* LOGO */
+.logo {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f1f1f;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+.nav {
+  display: flex;
+  gap: 28px;
+}
+
+
+.nav a {
+  text-decoration: none;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #6b6b6b;
+}
+
+.nav a:hover {
+  color: #1f1f1f;
+}
+
+
+.button {
+  background: #8b2f23;
+  color: #ffffff;
+  text-decoration: none;
+
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+}
+
+.button:hover {
+  background: rgb(115, 38, 28);
+}

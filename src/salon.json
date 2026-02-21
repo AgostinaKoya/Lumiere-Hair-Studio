@@ -1,0 +1,9 @@
+{
+  "salon": {
+    "name": "Lumiere Hair Studio",
+    "openDays": [2, 3, 4, 5, 6, 0],
+    "openTime": "09:00",
+    "closeTime": "19:00",
+    "slotDuration": 60
+  }
+}

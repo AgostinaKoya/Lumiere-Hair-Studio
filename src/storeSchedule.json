@@ -1,0 +1,52 @@
+{
+  "storeSchedule": [
+    {  "id": 1,
+      "dayOfWeek": "MONDAY",
+      "openTime": "09:00",
+      "closeTime": "18:00",
+      "isClosed": false
+    },
+    {
+        "id": 2,
+      "dayOfWeek": "TUESDAY",
+      "openTime": "09:00",
+      "closeTime": "18:00",
+      "isClosed": false
+    },
+    {
+        "id": 3,
+      "dayOfWeek": "WEDNESDAY",
+      "openTime": "09:00",
+      "closeTime": "18:00",
+      "isClosed": false
+    },
+    {
+        "id": 4,
+      "dayOfWeek": "THURSDAY",
+      "openTime": "11:00",
+      "closeTime": "18:00",
+      "isClosed": false
+    },
+    {
+        "id": 5,
+      "dayOfWeek": "FRIDAY",
+      "openTime": "08:00",
+      "closeTime": "18:00",
+      "isClosed": false
+    },
+    {
+        "id": 6,
+      "dayOfWeek": "SATURDAY",
+      "openTime": "11:00",
+      "closeTime": "16:00",
+      "isClosed": false
+    },
+    {
+        "id": 7,
+      "dayOfWeek": "SUNDAY",
+      "openTime": null,
+      "closeTime": null,
+      "isClosed": true
+    }
+  ]
+}

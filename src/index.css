@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+
+
+
+:root {
+  --primary: #8b2f23;
+  --primary-dark: #73261c;
+  --bg-light: #faf4ee;
+  --text-dark: #1f1f1f;
+  --text-muted: #6b6b6b;
+  --border-soft: #e8ddd4;
+  --font-title: "serif";
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+
+
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+  line-height: 1.6;
+  padding-top: 100px;
+}
+

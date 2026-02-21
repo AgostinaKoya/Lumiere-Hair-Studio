@@ -1,0 +1,171 @@
+.presentation {
+  background: #fdf6ef;
+  text-align: center;
+  padding: 120px 20px;
+
+}
+
+.badge {
+  display: inline-block;
+  background: #f1e2d8;
+  color: #8b3a2b;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.presentation h1 {
+  font-size: 52px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  font-family: "Playfair Display", serif;
+}
+
+.presentation p {
+  max-width: 620px;
+  margin: 0 auto 40px;
+  font-size: 18px;
+  color: #555;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.primaryBtn {
+  background: #8b3a2b;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.secondaryBtn {
+  border: 1px solid #e0d3ca;
+  padding: 14px 28px;
+  border-radius: 10px;
+  color: #333;
+}
+
+/* SERVICES */
+
+.services {
+ background: linear-gradient(
+    to bottom,
+    #fbf6f1 0%,
+    #fffaf6 40%,
+    #fcf8f5 100%
+  );
+  padding: 100px 20px;
+  text-align: center;
+
+}
+
+.services h1 {
+  font-size: 40px;
+  margin-bottom: 12px;
+  font-family: var(--font-title);
+
+}
+
+.services p {
+  color: #666;
+  margin-bottom: 60px;
+  font-family: "Inter", sans-serif;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: left;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Inter", sans-serif;
+}
+
+.card h2 {
+  font-size: 17px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.card span {
+  display: block;
+  color: #666;
+  font-size: 14px;
+}
+
+.time {
+  font-size: 14px;
+}
+
+.price {
+  color: #8b3a2b !important;
+  font-weight: 600;
+  font-size: 25px;
+}
+
+
+.cardFooter{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.timeContainer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* WHY */
+
+.why_choose_us {
+  background: #fbf2ec;
+  padding: 100px 40px;
+  text-align: center;
+
+}
+
+.why_choose_us h1 {
+  font-size: 40px;
+  margin-bottom: 12px;
+  font-family: "Playfair Display", serif;    
+}
+
+.why_choose_us p {
+  color: #666;
+  margin-bottom: 60px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feature h3 {
+  font-size: 17px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.feature p {
+  font-size: 14px;
+  color: #555;
+}
