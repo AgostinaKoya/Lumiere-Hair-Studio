@@ -14,8 +14,16 @@ export const TurnsSelectProvider = ({ children }) => {
 
   const addService = (service, cutTimer) => {
     setItemsSelect((prev) => ({ ...prev, service, cutTimer }));
-    console.log("Service added to context:", service);
+    console.log("Service added to context:", service , "Cut timer:", cutTimer);
   };
+
+  const getService = () => {
+    return itemSelect.service;
+  }
+
+    const getCutTimer = () => {
+    return itemSelect.cutTimer;
+  }
 
   console.log("Current itemSelect state:", itemSelect);
 
@@ -24,6 +32,8 @@ export const TurnsSelectProvider = ({ children }) => {
     itemSelect,
     setItemsSelect,
     addService,
+    getService,
+    getCutTimer
   };
 
   return (

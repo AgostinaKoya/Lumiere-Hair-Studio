@@ -1,21 +1,21 @@
 import styles from "./haircutsCard.module.css";
 import { Link } from "./Link";
-// import {TurnsSelectContext} from "../context/TurnsSelectContext";
-// import { useContext } from "react";
+ import {TurnsSelectContext} from "../context/TurnsSelectContext";
+ import { useContext } from "react";
 
 export const HaircutsCard = ({ haircut }) => {
 
-  // const { addService } = useContext(TurnsSelectContext);
+   const { addService } = useContext(TurnsSelectContext);
 
-  // const handleClick = () => {
-  //   addService(haircut.id, haircut.durationMinutes);
+   const handleClick = () => {
+     addService(haircut.id, haircut.durationMinutes);
     
-  //   console.log("Selected haircut ID:", haircut.id, "Duration:", haircut.durationMinutes);
-  // };
+    console.log("Selected haircut ID:", haircut.id, "Duration:", haircut.durationMinutes);
+   };
 
 
   return (
-    <Link href={`/services/${haircut.id}`} className={styles.cardContent} > 
+    <Link href={`/services/${haircut.id}`} className={styles.cardContent} onClick={handleClick}> 
       <div className={styles.card}>
         <div className={styles.left}>
           <span className={styles.name}>{haircut.name}</span>
