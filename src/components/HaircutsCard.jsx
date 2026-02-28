@@ -2,20 +2,26 @@ import styles from "./haircutsCard.module.css";
 import { Link } from "./Link";
  import {TurnsSelectContext} from "../context/TurnsSelectContext";
  import { useContext } from "react";
+import { useNavigate } from 'react-router'
 
 export const HaircutsCard = ({ haircut }) => {
+
+  const navigate = useNavigate()
+
+
 
    const { addService } = useContext(TurnsSelectContext);
 
    const handleClick = () => {
-     addService(haircut.id, haircut.durationMinutes);
+     addService(haircut.id, haircut.name , haircut.durationMinutes);
     
-    console.log("Selected haircut ID:", haircut.id, "Duration:", haircut.durationMinutes);
+     navigate(`/services/${haircut.id}`);
+    //console.log("Selected haircut ID:", haircut.id, "Duration:", haircut.durationMinutes);
    };
 
 
   return (
-    <Link href={`/services/${haircut.id}`} className={styles.cardContent} onClick={handleClick}> 
+    <div className={styles.cardContent} onClick={handleClick}> 
       <div className={styles.card}>
         <div className={styles.left}>
           <span className={styles.name}>{haircut.name}</span>
@@ -30,7 +36,7 @@ export const HaircutsCard = ({ haircut }) => {
 
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

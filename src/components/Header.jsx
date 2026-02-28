@@ -1,8 +1,17 @@
 import { Link } from "../components/Link";
 import styles from "./header.module.css";
+import { useAuthStore } from '../store/authStore'
 
 
 export function Header() {
+
+  const {isLoggedIn , logout} = useAuthStore()
+
+  const handleLogout = () =>{
+    logout()
+  }
+
+
   return (
     <>
       <header className={styles.header}>
@@ -33,7 +42,16 @@ export function Header() {
             <Link to="/services"> Services </Link>
             <Link to="/"> Home </Link>
             <Link to="/"> Mis Turnos </Link>
-            <Link to="/login"> Login </Link>
+            {
+              isLoggedIn ?
+              (
+                 <button onClick={handleLogout} > Logout</button>
+              ) :
+              (
+               <Link to="/login"> Login </Link>
+              )
+            }
+
           </nav>
 
           {/* Botón */}

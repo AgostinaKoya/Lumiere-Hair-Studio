@@ -1,20 +1,29 @@
 import { createContext, useState } from "react";
+import { useEffect } from "react";
 
 export const TurnsSelectContext = createContext();
 
+const initialTurnState = {
+      service: null,
+      serviceName: "",      
+      duration: null,
+      date: "",
+}
+
 export const TurnsSelectProvider = ({ children }) => {
-  const [itemSelect, setItemsSelect] = useState({
-    service: null,
-    cutTimer: 0,
-    date: "",
-    time: "",
-    name: null,
-    phone: null,
+const [itemSelect, setItemsSelect] = useState(() => {
+    const saved = localStorage.getItem("myApp_turnData");
+    return saved ? JSON.parse(saved) : initialTurnState;
   });
 
-  const addService = (service, cutTimer) => {
-    setItemsSelect((prev) => ({ ...prev, service, cutTimer }));
-    console.log("Service added to context:", service , "Cut timer:", cutTimer);
+
+  useEffect(() => {
+    localStorage.setItem("myApp_turnData", JSON.stringify(itemSelect));
+  }, [itemSelect]);
+
+  const addService = (service,serviceName, duration) => {
+    setItemsSelect((prev) => ({ ...prev, service, serviceName, duration }));
+   // console.log("Service added to context:", service , "Cut timer:", cutTimer);
   };
 
   const getService = () => {
@@ -22,10 +31,22 @@ export const TurnsSelectProvider = ({ children }) => {
   }
 
     const getCutTimer = () => {
-    return itemSelect.cutTimer;
+    return itemSelect.duration;
   }
 
-  console.log("Current itemSelect state:", itemSelect);
+  //console.log("Current itemSelect state:", itemSelect);
+
+  const updateTurnData = (data) => {
+  setItemsSelect(prev => ({
+    ...prev,
+    ...data
+  }));
+};
+
+const clearTurn = () => {
+  setItemsSelect(initialTurnState);
+  localStorage.removeItem("myApp_turnData");
+};
 
 
   const value = {
@@ -33,7 +54,9 @@ export const TurnsSelectProvider = ({ children }) => {
     setItemsSelect,
     addService,
     getService,
-    getCutTimer
+    getCutTimer,
+    updateTurnData,
+    clearTurn
   };
 
   return (

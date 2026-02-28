@@ -1,10 +1,12 @@
 import storeShedule from "../storeSchedule.json";
 import styles from "./haircut.module.css";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import cortes from "../cortes.json";
 import { useEffect, useState } from "react";
 import { TurnsSelectContext } from "../context/TurnsSelectContext";
 import { useContext } from "react";
+import { useAuthStore } from '../store/authStore'
 
 
 
@@ -46,16 +48,26 @@ const timeToMinutes = (time) => {
 
 export function HairCutDetails( ) {
 
+  const { haircutId } = useParams();
+  const navigate = useNavigate()
   const [date, setDate] = useState("");
   const [occupiedhours, setOccupedHours] = useState([]);
   const [hours, setHours] = useState([]);
 
+  const [selectedTime, setSelectedTime] = useState(null)
   
  
-  //CONTEXTO
-  const { getCutTimer } = useContext(TurnsSelectContext);
+  //CONTEXTO Para obtener la duracion del corte seleccionada. 
+  const { getCutTimer,setItemsSelect, updateTurnData } = useContext(TurnsSelectContext);
   const durationHairCut = getCutTimer();
+
+  //STORE CON ZUZTAND
+  const { isLoggedIn } = useAuthStore()
   
+
+console.log("horario desde el context "+ durationHairCut + "Id del corte " + haircutId )
+
+
  useEffect(() => {
     if (!date) return;
 
@@ -66,7 +78,7 @@ export function HairCutDetails( ) {
 
       setOccupedHours(occupied);
 
-      console.log("Turnos ocupados:", occupied);
+      //console.log("Turnos ocupados:", occupied);
     }
 
     loadAppointments();
@@ -140,9 +152,40 @@ export function HairCutDetails( ) {
   const handleChangeDate = (e) => {
 
     const select = e.target.value;
+
+    //guardo el dia seleccionado
     setDate(select);
 
   }
+
+  
+//console.log("fecha y hora " + date + " " + selectedTime)
+
+const handleConfirm = () => {
+if (!date || !selectedTime) return;
+
+
+  //TODOO HACER EL POST 
+ // POST /appointments
+// {
+//   userId,
+//   serviceId,
+//   date,
+//   time
+// }
+
+
+
+ updateTurnData({
+    date,
+    time: selectedTime
+  });
+
+
+
+  navigate('/success');
+  }
+
 
   return (
     <div className={styles.container}>
@@ -168,8 +211,11 @@ export function HairCutDetails( ) {
       hours.length > 0 ? (
         <div className={styles.hoursList}>
           {hours.map((hour) => (
-            <button key={hour} className={styles.hourItem}>
-              {hour}
+            <button 
+            key={hour}
+            className={styles.hourItem}
+            onClick={() => setSelectedTime(hour)}>
+              {hour} 
             </button>
           ))}
         </div>
@@ -179,8 +225,24 @@ export function HairCutDetails( ) {
       }
       
       <section className={styles.actions}>
-        <button className={styles.cancelButton}>Atrás</button>
-        <button className={styles.submitButton}>Continuar</button>
+        <button onClick={() => navigate(-1)} className={styles.cancelButton}>Atrás</button>
+
+        {
+          isLoggedIn ? 
+          ( <button onClick={handleConfirm} className={styles.submitButton} disabled={!selectedTime}>Continuar</button> 
+
+          ) : 
+          (
+            <button 
+          onClick={() => navigate('/login')} 
+          className={styles.registerButton} 
+    >
+      Inicia sesion para confirmar
+    </button>
+          )
+
+        }
+        
       </section>
     </div>
   );
