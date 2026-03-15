@@ -1,7 +1,7 @@
-import { TurnsSelectContext } from "../context/TurnsSelectContext";
+import { TurnsSelectContext } from "../../context/TurnsSelectContext";
 import { useContext } from "react";
 import { useState } from "react";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 import { useId } from "react";
 import { useNavigate } from "react-router";
 import styles from './register.module.css'
@@ -16,22 +16,54 @@ export function Register (){
   const navigate = useNavigate()
 
 
-    const handleSubmit = () =>{
+  //   const handleSubmit = () =>{
 
-   e.preventDefault()
+  //  e.preventDefault()
 
-    const formData = new FormData(e.target)
-    const name = formData.get(nameId)
-    const email = formData.get(emailId)
-    const password = formData.get(passwordId)
+  //   const formData = new FormData(e.target)
+  //   const name = formData.get(nameId)
+  //   const email = formData.get(emailId)
+  //   const password = formData.get(passwordId)
 
-    // Mock register - en una app real, harías una petición a la API
-    if (name && email && password) {
-      login()
-      navigate('/search')
-    }
+  //   // Mock register - en una app real, harías una petición a la API
+  //   if (name && email && password) {
+  //     login()
+  //     navigate('/search')
+  //   }
 
-    }
+  //   }
+
+  //PROBAR... Luego del error de cors..
+  const handleSubmit = async (e) => {
+  e.preventDefault()
+
+  const formData = new FormData(e.target)
+
+  const name = formData.get(nameId)
+  const email = formData.get(emailId)
+  const password = formData.get(passwordId)
+
+  try {
+    const res = await fetch("http://localhost:1234/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    })
+
+    if (!res.ok) throw new Error("Error en registro")
+
+    // después del register mandamos a login
+    navigate("/login")
+
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 
     return(

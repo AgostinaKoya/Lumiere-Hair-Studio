@@ -1,39 +1,29 @@
-import { useState } from 'react'
+
 import {Routes, Route} from 'react-router'
 import './index.css'
-
 import {Header} from './components/Header'
+// import { useAuthStore } from './store/authStore'
+// import { Login } from './public/Login/Login'
+// import { HomePage } from './pages/Home'
+// import { Services } from './pages/Services'
 
-import { Login } from './pages/Login'
-import { HomePage } from './pages/Home'
-import { Services } from './pages/Services'
-import { NotFoundPage } from './pages/404'
-import { HairCutDetails } from './pages/HairCutDetails'
-import {PageOrderSuccess} from './pages/Success'
-import { Register } from './pages/Register'
+// import {RoutesWithNotFount} from './components/RoutesWithNotFound'
+// import { HairCutDetails } from './pages/HairCutDetails'
+// import {PageOrderSuccess} from './pages/Success'
+// import { Register } from './public/Register/Register'
+// import { PrivateGuard } from './guard/PrivateGuard'
+// import { PrivateRouter } from './private/PrivateRoutes/privateRoutes'
 
-function App() {
 
+
+function App({children}) {
 
   return (
-    <div>
+    <>
     <Header/>
-<Routes>
-        <Route path='/' element={<HomePage/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path="/register" element={<Register/>}/>  
-        
-        {/* Primero las rutas específicas de servicios */}
-        <Route path='/services' element={<Services/>}/>
-        <Route path="/services/:haircutId" element={<HairCutDetails/>} />
-        <Route path="/success" element={<PageOrderSuccess/>} />    
+    {children}
 
-        
-        {/* El comodín * DEBE ir siempre al final */}
-        <Route path='*' element={<NotFoundPage/>}/>
-      </Routes>
-
-    </div>
+    </>
   )
 }
 

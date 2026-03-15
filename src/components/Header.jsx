@@ -7,8 +7,21 @@ export function Header() {
 
   const {isLoggedIn , logout} = useAuthStore()
 
-  const handleLogout = () =>{
-    logout()
+  const handleLogout = async (e) =>{
+    e.preventDefault();
+
+    const response = await fetch('http://localhost:1234/logout' , {
+      method: 'POST',
+      credentials: 'include', 
+    })
+
+if (response.ok) {
+    logout();
+  }
+
+
+
+  
   }
 
 
@@ -41,7 +54,7 @@ export function Header() {
           <nav className={styles.nav}>
             <Link to="/services"> Services </Link>
             <Link to="/"> Home </Link>
-            <Link to="/"> Mis Turnos </Link>
+            <Link to="/private/dashboard"> Mis Turnos </Link>
             {
               isLoggedIn ?
               (

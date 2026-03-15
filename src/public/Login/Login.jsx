@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { useNavigate } from 'react-router'
-import { useAuthStore } from '../store/authStore'
-import styles from './register.module.css'
+import { useAuthStore } from '../../store/authStore'
+import styles from '../Register/register.module.css'
 
 export function Login() {
   const { login } = useAuthStore()
@@ -9,19 +9,32 @@ export function Login() {
   const passwordId = useId()
   const emailId = useId()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
 
-    const formData = new FormData(e.target)
-    const email = formData.get(emailId)
-    const password = formData.get(passwordId)
-    
-    // Mock login - en una app real, harías una petición a la API
-    if (email && password) {
-      login()
-      navigate('/services')
-    }
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+      const formData = new FormData(e.target)
+     const email = formData.get(emailId)
+     const password = formData.get(passwordId)
+
+  const response = await fetch('http://localhost:1234/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+        email,
+        password
+      }),
+    // Esto es lo que permite que la cookie 'access_token' se guarde
+    credentials: 'include' 
+  });
+
+  if (response.ok) {
+    const { user } = await response.json();
+    login(user); // Esto esta funcionando???
+    navigate('/services');
+  } else {
+    alert("Error al iniciar sesión");
   }
+};
 
   return (
     <div className={styles.container}>
