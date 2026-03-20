@@ -23,7 +23,6 @@ const [itemSelect, setItemsSelect] = useState(() => {
 
   const addService = (service,serviceName, duration) => {
     setItemsSelect((prev) => ({ ...prev, service, serviceName, duration }));
-   // console.log("Service added to context:", service , "Cut timer:", cutTimer);
   };
 
   const getService = () => {
