@@ -1,0 +1,72 @@
+[
+    {
+      "id": "1",
+      "name": "Corte clásico",
+      "description": "Corte tradicional con tijera o máquina, prolijo y versátil.",
+      "category": "MASCULINO",
+      "price": 4500,
+      "currency": "ARS",
+      "durationMinutes": 30,
+      "active": true
+    },
+    {
+      "id": "2",
+      "name": "Corte degradé (fade)",
+      "description": "Laterales y nuca con degradado progresivo.",
+      "category": "MASCULINO",
+      "price": 5500,
+      "currency": "ARS",
+      "durationMinutes": 45,
+      "active": true
+    },
+    {
+      "id": "3",
+      "name": "Corte + barba",
+      "description": "Corte de cabello con perfilado completo de barba.",
+      "category": "MASCULINO",
+      "price": 7500,
+      "currency": "ARS",
+      "durationMinutes": 60,
+      "active": true
+    },
+    {
+      "id": "4",
+      "name": "Corte en capas",
+      "description": "Corte femenino en capas para dar movimiento al cabello.",
+      "category": "FEMENINO",
+      "price": 9000,
+      "currency": "ARS",
+      "durationMinutes": 60,
+      "active": true
+    },
+    {
+      "id": "5",
+      "name": "Corte recto",
+      "description": "Corte parejo ideal para mantener largo uniforme.",
+      "category": "FEMENINO",
+      "price": 8500,
+      "currency": "ARS",
+      "durationMinutes": 50,
+      "active": true
+    },
+    {
+      "id": "6",
+      "name": "Corte infantil básico",
+      "description": "Corte rápido y cómodo para niños.",
+      "category": "INFANTIL",
+      "price": 4000,
+      "currency": "ARS",
+      "durationMinutes": 25,
+      "active": true
+    },
+    {
+      "id": "7",
+      "name": "Corte infantil moderno",
+      "description": "Corte con estilo actual adaptado para niños.",
+      "category": "INFANTIL",
+      "price": 4500,
+      "currency": "ARS",
+      "durationMinutes": 30,
+      "active": true
+    }
+]
