@@ -3,6 +3,7 @@ import crypto from 'node:crypto'
 const {Schema} = new DBLocal({path: '.db'})
 import bcrypt from 'bcrypt'
 import { DEFAULTS } from "./config.js";
+import { UnauthorizedError } from "./handleErrors/errors.js";
 
 const User = Schema('User', {
     _id:{ type: String, required: true},
@@ -44,7 +45,7 @@ export class UserRepository {
         if (!user) throw new Error('email does not exist')
 
         const isValid = await bcrypt.compare(password, user.password)
-        if(!isValid) throw new Error('password is invalid')
+        if(!isValid) throw new UnauthorizedError('password is invalid')
 
 
             const {password: _, ...publicUser} = user
