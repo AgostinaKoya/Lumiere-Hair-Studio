@@ -1,66 +1,118 @@
-import services from '../services.json' with { type: "json" };
+import mysql from 'mysql2/promise'
+import { config, DEFAULTS } from '../config.js'
+
+const connectionPromise = mysql.createConnection(config)
 
 export class ServiceModel {
-  static async getAll({
-    name,
-    price,
-    category,
-    limit,
-    offset = DEFAULTS.LIMIT_OFFSET,
-  }) {
-    let filteredService = services;
+  static async getAll({ name, price, category_id, limit = DEFAULTS.LIMIT_PAGINATION, offset = DEFAULTS.LIMIT_OFFSET }) {
+    const connection = await connectionPromise
+    const filters = []
+    const params = []
 
-    if (category) {
-      const searchTerms = category.toLowerCase();
-      filteredService = filteredService.filter((service) =>
-        service.category.toLowerCase().includes(searchTerms),
-      );
+    if (name) {
+      filters.push('LOWER(name) LIKE ?')
+      params.push(`${name.toLowerCase()}%`)
     }
 
-    if (limit) {
-      const limitNumber = Number(limit);
-      const offserNumber = Number(offset);
+    if (category_id) {
+      filters.push('category_id = ?')
+      params.push(Number(category_id))
+    } 
 
-      filteredService = filteredService.slice(
-        offserNumber,
-        offserNumber + limitNumber,
-      );
+    if (price) {
+      filters.push('price = ?')
+      params.push(Number(price))
     }
 
-    return filteredService;
+    let sql = 'SELECT * FROM services'
+    if (filters.length) {
+      sql += ` WHERE ${filters.join(' AND ')}`
+    }
+
+    sql += ' ORDER BY id'
+    sql += ' LIMIT ? OFFSET ?'
+    params.push(Number(limit), Number(offset))
+
+    const [rows] = await connection.query(sql, params)
+    return rows
   }
 
-   static async getById( { id }){
-  
-    const service = services.find((service) => String(service.id) === id);
+  static async getById({ id }) {
+    const connection = await connectionPromise
+    const [rows] = await connection.query('SELECT * FROM services WHERE id = ?', [id])
+    return rows[0] ?? null
+  }
 
+  static async create({ name, description, category, price, currency, durationMinutes, active, genders }) {
+    const connection = await connectionPromise
 
-    return service
+    const [result] = await connection.execute(
+      'INSERT INTO services (name, description, category_id, price, currency, duration_minutes, active, genders) VALUES (?, ?, ?, ?, ?, ?, ?,?)',
+      [name, description, category, Number(price), currency, Number(durationMinutes), active ? 1 : 0, genders],
+    )
 
-   }
+    const insertId = result.insertId
+    const [rows] = await connection.query('SELECT * FROM services WHERE id = ?', [insertId])
+    return rows[0]
+  }
 
-    static async create({
-    name,
-    description,
-    category,
-    price,
-    currency,
-    durationMinutes,
-    active,
-  }){
-    const newService = {
-    id: crypto.randomUUID(),
-    name,
-    description,
-    category,
-    price,
-    currency,
-    durationMinutes,
-    active,
-  };
+  static async update({ id, name, description, category, price, currency, durationMinutes, active, genders }) {
+    const connection = await connectionPromise
+    
+    const updates = []
+    const params = []
 
-  services.push(newService);
+    if (name !== undefined) {
+      updates.push('name = ?')
+      params.push(name)
+    }
+    if (description !== undefined) {
+      updates.push('description = ?')
+      params.push(description)
+    }
+    if (category !== undefined) {
+      updates.push('category_id = ?')
+      params.push(Number(category))
+    }
+    if (price !== undefined) {
+      updates.push('price = ?')
+      params.push(Number(price))
+    }
+    if (currency !== undefined) {
+      updates.push('currency = ?')
+      params.push(currency)
+    }
+    if (durationMinutes !== undefined) {
+      updates.push('duration_minutes = ?')
+      params.push(Number(durationMinutes))
+    }
+    if (active !== undefined) {
+      updates.push('active = ?')
+      params.push(active ? 1 : 0)
+    }
+    if (genders !== undefined) {
+      updates.push('genders = ?')
+      params.push(genders)
+    }
 
-  return newService
+    if (updates.length === 0) {
+      return null
+    }
+
+    params.push(id)
+    const sql = `UPDATE services SET ${updates.join(', ')} WHERE id = ?`
+    
+    await connection.execute(sql, params)
+    
+    const [rows] = await connection.query('SELECT * FROM services WHERE id = ?', [id])
+    return rows[0] ?? null
+  }
+
+  static async delete({ id }) {
+    const connection = await connectionPromise
+    
+    const [result] = await connection.execute('DELETE FROM services WHERE id = ?', [id])
+    
+    return result.affectedRows > 0
   }
 }

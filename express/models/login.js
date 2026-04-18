@@ -21,7 +21,7 @@ export class LoginModel {
             if (error.message.includes('password') || error.message.includes('email')) {
                 throw new UnauthorizedError('Credenciales inválidas');
             }
-            // Relanzar otros errores
+
             throw error;
         }
     }}

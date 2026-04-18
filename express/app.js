@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import {corsMiddleware} from './middlewares/cors.js'
-import { DEFAULTS } from "./config.js";
+import { DEFAULTS, config } from "./config.js";
 import { jwtMiddleware } from "./middlewares/jwt.js";
 import {serviceRouter} from './routes/service.js'
 import { appoimentRouter } from "./routes/appoiment.js";
@@ -11,7 +11,10 @@ import { registerRouter } from "./routes/register.js";
 import { logoutRouter } from "./routes/logout.js";
 
 
+
 const PORT = process.env.PORT ?? DEFAULTS.PORT;
+
+
 
 const app = express();
 app.use(express.json());

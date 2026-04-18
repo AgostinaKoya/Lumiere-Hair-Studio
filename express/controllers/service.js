@@ -6,16 +6,18 @@ export class ServiceController {
     const {
       name,
       price,
-      category,
+      category_id,
       limit,
       offset = DEFAULTS.LIMIT_OFFSET,
     } = req.query;
 
-  const filteredService = await ServiceModel.getAll({name,
+    const filteredService = await ServiceModel.getAll({
+      name,
       price,
-      category,
+      category_id,
       limit,
-      offset})
+      offset,
+    })
 
     return res.json(filteredService);
   }
@@ -35,21 +37,77 @@ export class ServiceController {
     const {
     name,
     description,
-    category,
+    category_id,
     price,
     currency,
-    durationMinutes,
+    duration_minutes,
     active,
+    genders
   } = req.body;
 
-  const newService = await ServiceModel.create({name,
+  const newService = await ServiceModel.create({
+    name,
     description,
-    category,
+    category: category_id,
     price,
     currency,
-    durationMinutes,
-    active,})
+    durationMinutes: duration_minutes,
+    active,
+    genders
+  })
 
   return res.status(201).json(newService);
+  }
+
+  static async update(req, res) {
+    const { id } = req.params;
+    const {
+      name,
+      description,
+      category_id,
+      price,
+      currency,
+      duration_minutes,
+      active,
+      genders
+    } = req.body;
+
+    const service = await ServiceModel.getById({ id });
+
+    if (!service) {
+      return res.status(404).json({ error: "Service not found" });
+    }
+
+    const updatedService = await ServiceModel.update({
+      id,
+      name,
+      description,
+      category: category_id,
+      price,
+      currency,
+      durationMinutes: duration_minutes,
+      active,
+      genders
+    });
+
+    return res.json(updatedService);
+  }
+
+  static async delete(req, res) {
+    const { id } = req.params;
+
+    const service = await ServiceModel.getById({ id });
+
+    if (!service) {
+      return res.status(404).json({ error: "Service not found" });
+    }
+
+    const deleted = await ServiceModel.delete({ id });
+
+    if (deleted) {
+      return res.json({ message: "Service deleted successfully" });
+    }
+
+    return res.status(500).json({ error: "Failed to delete service" });
   }
 }

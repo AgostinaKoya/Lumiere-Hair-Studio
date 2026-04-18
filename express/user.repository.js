@@ -1,58 +1,72 @@
-import DBLocal from 'db-local'
+import mysql from 'mysql2/promise'
 import crypto from 'node:crypto'
-const {Schema} = new DBLocal({path: '.db'})
 import bcrypt from 'bcrypt'
-import { DEFAULTS } from "./config.js";
+import { DEFAULTS, config } from "./config.js";
 import { UnauthorizedError } from "./handleErrors/errors.js";
 
-const User = Schema('User', {
-    _id:{ type: String, required: true},
-    email:{ type: String, required: true},
-    password:{ type: String, required: true}
-})
-
-
+// Crear pool de conexiones
+const pool = mysql.createPool(config)
 
 export class UserRepository {
     static async create({email, password}) {
         Validation.email(email)
         Validation.password(password)
 
+        const connection = await pool.getConnection()
+        try {
+            // Verificar que el usuario no existe
+            const [existingUser] = await connection.query(
+                'SELECT id FROM users WHERE email = ?',
+                [email]
+            )
+            
+            if (existingUser.length > 0) {
+                throw new Error('email already exist')
+            }
 
+            const id = crypto.randomUUID()
+            const hashedPassword = await bcrypt.hash(password, DEFAULTS.SALT_ROUNDS)
 
-        //Aserguramos que el user no existe
-        const useremail = User.findOne({ email})
-        if (useremail) throw new Error('email already exist')
+            // Insertar el nuevo usuario usando UUID_TO_BIN para convertir el UUID string a BINARY
+            await connection.query(
+                'INSERT INTO users (id, email, password) VALUES (UUID_TO_BIN(?), ?, ?)',
+                [id, email, hashedPassword]
+            )
 
-        const id = crypto.randomUUID()
-        const hashedPassword = await bcrypt.hash(password, DEFAULTS.SALT_ROUNDS)
-
-        User.create({
-            _id: id,
-            email,
-            password:hashedPassword
-        }).save()
-
-        return id
-
-
+            return id
+        } finally {
+            connection.release()
+        }
     }
+
     static async login({email, password}) {
         Validation.email(email)
         Validation.password(password)
 
-        const user = User.findOne({email})
-        if (!user) throw new Error('email does not exist')
+        const connection = await pool.getConnection()
+        try {
+            const [users] = await connection.query(
+                'SELECT BIN_TO_UUID(id) as id, email, password FROM users WHERE email = ?',
+                [email]
+            )
 
-        const isValid = await bcrypt.compare(password, user.password)
-        if(!isValid) throw new UnauthorizedError('password is invalid')
+            if (users.length === 0) {
+                throw new Error('email does not exist')
+            }
 
+            const user = users[0]
+            const isValid = await bcrypt.compare(password, user.password)
+            
+            if (!isValid) {
+                throw new UnauthorizedError('password is invalid')
+            }
 
             const {password: _, ...publicUser} = user
-
             return publicUser
+        } finally {
+            connection.release()
+        }
     }
-
 }
 
 class Validation {

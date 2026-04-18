@@ -7,6 +7,13 @@ export const DEFAULTS = {
     
 }
 
+export const config = {
+    host:'localhost',
+    user:'root',
+    port: 3306,
+    password: '',
+    database:'db_lummier'
+}
 
 export const SECRET_KEY = process.env.SECRET_KEY;
 
