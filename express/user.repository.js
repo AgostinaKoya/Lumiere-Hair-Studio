@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { DEFAULTS, config } from "./config.js";
 import { UnauthorizedError } from "./handleErrors/errors.js";
 
-// Crear pool de conexiones
+
 const pool = mysql.createPool(config)
 
 export class UserRepository {
@@ -14,7 +14,6 @@ export class UserRepository {
 
         const connection = await pool.getConnection()
         try {
-            // Verificar que el usuario no existe
             const [existingUser] = await connection.query(
                 'SELECT id FROM users WHERE email = ?',
                 [email]
@@ -27,7 +26,7 @@ export class UserRepository {
             const id = crypto.randomUUID()
             const hashedPassword = await bcrypt.hash(password, DEFAULTS.SALT_ROUNDS)
 
-            // Insertar el nuevo usuario usando UUID_TO_BIN para convertir el UUID string a BINARY
+         
             await connection.query(
                 'INSERT INTO users (id, email, password) VALUES (UUID_TO_BIN(?), ?, ?)',
                 [id, email, hashedPassword]
