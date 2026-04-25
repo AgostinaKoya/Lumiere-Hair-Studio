@@ -13,6 +13,8 @@ export const jwtMiddleware = () => {
       } catch (error) {
         // token invalido o expirado
       }
+    } else {
+      console.log("⚠️ No se recibió token en las cookies");
     }
 
     next();

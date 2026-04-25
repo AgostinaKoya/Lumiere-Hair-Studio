@@ -10,7 +10,7 @@ export class LoginModel {
         try {
             const user = await UserRepository.login({ email, password });
 
-            const token = jwt.sign({ user: user._id, email: user.email }, SECRET_KEY, {
+            const token = jwt.sign({ user: user.id, email: user.email }, SECRET_KEY, {
             expiresIn: "1h",
         });
 

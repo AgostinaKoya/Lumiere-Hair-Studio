@@ -2,8 +2,10 @@ import { AppoimentModel } from "../models/appoiment.js";
 
 export class AppoimentController {
   static async getAll(req, res) {
-    const { date, startTime, serviceId, state } = req.query;
+    const { date, startTime, serviceId, state, serviceName } = req.query;
+  
     const clienteId = req.session?.user?.user;
+    
     if (!clienteId) {
       return res.status(401).json({ error: "No autenticado" });
     }
@@ -13,7 +15,8 @@ export class AppoimentController {
       startTime,
       serviceId,
       state,
-      clienteId
+      clienteId,
+      serviceName
     });
 
     if (filteredAppointments.length === 0) {
@@ -25,13 +28,16 @@ export class AppoimentController {
 
   static async create(req, res) {
     try {
-      const { date, startTime, serviceId, nameService } = req.body;
-      const clienteId = req.session?.user?.user;
+      const {date, startTime,  userId, serviceId, employeeId } = req.body;
+    const clienteId = req.session?.user?.user;
+    
+    if (!clienteId) {
+      return res.status(401).json({ error: "No autenticado" });
+    }
       const newAppointment = await AppoimentModel.create({
-        date,
-        startTime,
-        serviceId,
-        nameService,
+        date, startTime, 
+        serviceId, 
+        employeeId,
         userId: clienteId,
       });
       return res.status(201).json(newAppointment);
@@ -41,15 +47,19 @@ export class AppoimentController {
   }
 
   static async cancelById(req, res) {
+      const clienteId = req.session?.user?.user;
+    
+    if (!clienteId) {
+      return res.status(401).json({ error: "No autenticado" });
+    }
     try {
       const { id } = req.params;
       const appointment = await AppoimentModel.cancelById({ id });
       return res.json({ message: "Turno cancelado", appointment });
     } catch (error) {
       return res.status(400).json({ error: error.message });
+      }
     }
-  }
-
   static async searchAvailables(req, res) {
     try {
       const {
