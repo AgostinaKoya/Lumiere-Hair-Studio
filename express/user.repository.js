@@ -2,15 +2,15 @@ import mysql from 'mysql2/promise'
 import crypto from 'node:crypto'
 import bcrypt from 'bcrypt'
 import { DEFAULTS, config } from "./config.js";
-import { UnauthorizedError } from "./handleErrors/errors.js";
+import { UnauthorizedError, ConflictError, ValidationError } from "./handleErrors/errors.js";
 
 
 const pool = mysql.createPool(config)
 
 export class UserRepository {
     static async create({email, password}) {
-        Validation.email(email)
-        Validation.password(password)
+        // Validation.email(email)
+        // Validation.password(password)
 
         const connection = await pool.getConnection()
         try {
@@ -20,7 +20,7 @@ export class UserRepository {
             )
             
             if (existingUser.length > 0) {
-                throw new Error('email already exist')
+                throw new ConflictError('email already exist')
             }
 
             const id = crypto.randomUUID()
@@ -39,8 +39,8 @@ export class UserRepository {
     }
 
     static async login({email, password}) {
-        Validation.email(email)
-        Validation.password(password)
+        // Validation.email(email)
+        // Validation.password(password)
 
         const connection = await pool.getConnection()
         try {
@@ -50,14 +50,14 @@ export class UserRepository {
             )
 
             if (users.length === 0) {
-                throw new Error('email does not exist')
+                throw new ValidationError('Invalid credentials')
             }
 
             const user = users[0]
             const isValid = await bcrypt.compare(password, user.password)
             
             if (!isValid) {
-                throw new UnauthorizedError('password is invalid')
+                throw new UnauthorizedError('Invalid credentials')
             }
 
             const {password: _, ...publicUser} = user
@@ -68,14 +68,14 @@ export class UserRepository {
     }
 }
 
-class Validation {
-    static email(email){
-         if(typeof email !== 'string') throw new Error(' email must be string')
-    }
+// class Validation {
+//     static email(email){
+//          if(typeof email !== 'string') throw new Error(' email must be string')
+//     }
 
-    static password(password){
-        if(typeof password !== 'string') throw new Error(' password must be string')
-        if(password.length <6) throw new Error(' password must be at least 6 characters long')
+//     static password(password){
+//         if(typeof password !== 'string') throw new Error(' password must be string')
+//         if(password.length <6) throw new Error(' password must be at least 6 characters long')
    
-    }
-}
+//     }
+// }

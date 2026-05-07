@@ -1,8 +1,9 @@
 import mysql from 'mysql2/promise';
 import crypto from 'node:crypto';
 import { config } from "../config.js";
-import appointments from "../appoiments.json" with { type: "json" };
-import services from '../services.json' with { type: "json" };
+import { NotFountError, ConflictError, ValidationError } from '../handleErrors/errors.js';
+// import appointments from "../appoiments.json" with { type: "json" };
+// import services from '../services.json' with { type: "json" };
 
 const pool = mysql.createPool(config);
 
@@ -77,7 +78,6 @@ export class AppoimentModel {
       if (serviceName) {
         query += ` AND s.name LIKE ?`;
         params.push(`%${serviceName}%`);
-        console.log("🔍 Filtro por serviceName aplicado:", serviceName, "-> LIKE:", `%${serviceName}%`);
       }
 
       query += ` ORDER BY a.date, a.start_time`;
@@ -109,7 +109,7 @@ export class AppoimentModel {
 
   static async create({ date, startTime,  userId, serviceId, employeeId }) {
     if (!date || !startTime || !serviceId || !userId || !employeeId) {
-      throw new Error("Debe enviar date, startTime, serviceId, userId y employeeId");
+      throw new ValidationError("Debe enviar date, startTime, serviceId, userId y employeeId");
     }
 
     const connection = await pool.getConnection();
@@ -121,7 +121,7 @@ export class AppoimentModel {
       );
 
       if (existing.length > 0) {
-        throw new Error("Turno no disponible");
+        throw new ConflictError("Turno no disponible");
       }
 
       const [result] = await connection.execute(
@@ -162,14 +162,14 @@ export class AppoimentModel {
       );
 
       if (rows.length === 0) {
-        throw new Error("Turno no encontrado");
+        throw new NotFountError("Turno no encontrado");
       }
 
       const appointment = rows[0];
 
       if (appointment.status === "cancelled") {
-      throw new Error("El turno ya está cancelado");
-    }
+        throw new ConflictError("El turno ya está cancelado");
+      }
 
       await connection.query(
         'UPDATE appointments SET status = ? WHERE id = ?',
@@ -188,12 +188,14 @@ static async searchAvailables({ date, startTime = "09:00", endTime = "18:00", in
   const connection = await pool.getConnection();
 
   if (!date) {
-    throw new Error("Debe enviar la fecha (date) en formato YYYY-MM-DD");
+    throw new ValidationError("Debe enviar la fecha (date) en formato YYYY-MM-DD");
   }
+  
 
   const intervalMinutes = Number(interval);
   if (Number.isNaN(intervalMinutes) || intervalMinutes <= 0) {
-    throw new Error("interval debe ser un número mayor que 0");
+    throw new ValidationError("interval debe ser un número mayor que 0");
+    
   }
 
   try {

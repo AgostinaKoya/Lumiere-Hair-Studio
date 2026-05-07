@@ -14,6 +14,7 @@ export const jwtMiddleware = () => {
         // token invalido o expirado
       }
     } else {
+      //TODOO
       console.log("⚠️ No se recibió token en las cookies");
     }
 

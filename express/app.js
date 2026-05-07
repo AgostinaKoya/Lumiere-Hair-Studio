@@ -12,6 +12,7 @@ import { logoutRouter } from "./routes/logout.js";
 import { employeesRouter } from "./routes/employees.js";
 
 
+
 const PORT = process.env.PORT ?? DEFAULTS.PORT;
 
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(corsMiddleware())
 app.use(jwtMiddleware());
+
 
 app.use('/login', loginRouter)
 app.use('/services' , serviceRouter)

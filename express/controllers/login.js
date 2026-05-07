@@ -4,36 +4,41 @@ import { UnauthorizedError, ValidationError, ConnectionError } from "../handleEr
 
 export class LoginController {
   static async login(req, res) {
+    if (!req.body || req.body === null || req.body === undefined) {
+      //return res.status(400).json({ type: 'VALIDATION_ERROR', message: 'Request body is required' })
+      
+    }
     const { email, password } = req.body;
 
     try {
       const { user, token } = await LoginModel.login({ email, password });
       
       
-      res
+      return res
         .cookie("access_token", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: process.env.NODE_ENV === "production" ? "strict" : "none",
           maxAge: 1000 * 60 * 60,
         })
+        .status(200)
         .send({ user, token });
 
         
-    } catch (error) {
+    } catch (e) {
 
-      if (error instanceof ValidationError) {
-        return res.status(400).send({ error: error.message });
+      if (e instanceof ValidationError) {
+         return res.status(e.statusCode).json({ type: e.name, message: e.message })
       }
 
-      if (error instanceof ConnectionError) {
-        return res.status(503).send({ error: "Servicio temporalmente no disponible" });
+      if (e instanceof ConnectionError) {
+        return res.status(504).send({ e: "Servicio temporalmente no disponible" });
       }
-      if (error instanceof UnauthorizedError) {
+      if (e instanceof UnauthorizedError) {
 
-        return res.status(401).send({ error: error.message });
+        return res.status(e.statusCode).send({ type: e.name, message: e.message });
       }
-      res.status(500).send({ error: "Ha ocurrido un error inesperado" });
+      res.status(500).send({ e: "Ha ocurrido un error inesperado" });
     }
 
     }
