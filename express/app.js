@@ -1,4 +1,4 @@
-import "dotenv/config";
+//import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import {corsMiddleware} from './middlewares/cors.js'
@@ -12,9 +12,7 @@ import { logoutRouter } from "./routes/logout.js";
 import { employeesRouter } from "./routes/employees.js";
 
 
-
 const PORT = process.env.PORT ?? DEFAULTS.PORT;
-
 
 
 const app = express();
@@ -40,6 +38,10 @@ app.get("/health", (req, res) => {
 });
 
 
-app.listen(PORT, () => {
-  console.log("Servidor levantado");
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Servidor levantado en http://localhost:${PORT}`)
+  })
+}
+
+export default app
