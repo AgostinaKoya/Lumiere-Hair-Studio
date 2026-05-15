@@ -41,7 +41,7 @@ export function HairCutDetails() {
         }
           const result = await response.json()
           const available = result.available
-          const occupaid = result.occupaid
+          //const occupaid = result.occupaid
           setHours(available)
          // setOccupedHours(occupaid)  
 

@@ -1,4 +1,4 @@
-import cortes from "../cortes.json";
+//import cortes from "../cortes.json";
 import { HaircutsCard } from "../components/HaircutsCard";
 import styles from "./services.module.css";
 
