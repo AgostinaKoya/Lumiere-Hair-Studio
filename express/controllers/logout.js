@@ -1,24 +1,17 @@
 import { UnauthorizedError } from "../handleErrors/errors.js";
-import { cookieOptions } from "../config/cookie_options.js";
+import { cookieOptions } from "../config/cookie_options";
 
-export class LogoutController{
-    static async logout(req, res){
+export class LogoutController {
+  static async logout(req, res) {
+    try {
+      const user = req.session?.user;
 
-        try{
-            const user = req.session?.user;
-    
-            if (!user) {
-                throw new UnauthorizedError("No hay sesión activa" )
-            }
-
-
-             const cookieOptions = {
-            ...cookieOptions,
-            path: "/",
-        };
+      if (!user) {
+        throw new UnauthorizedError("No hay sesión activa");
+      }
 
 
-        return res
+      return res
         .clearCookie("access_token", cookieOptions)
         .status(200)
         .json({
@@ -28,14 +21,14 @@ export class LogoutController{
           },
         });
 
-        }catch(e){
-            if(e instanceof UnauthorizedError){
-                return res.status(e.statusCode).json({ 
-                    type: e.name, 
-                    message: e.message 
-        });
-            }
 
-        }
+    } catch (e) {
+      if (e instanceof UnauthorizedError) {
+        return res.status(e.statusCode).json({
+          type: e.name,
+          message: e.message,
+        });
+      }
     }
+  }
 }
