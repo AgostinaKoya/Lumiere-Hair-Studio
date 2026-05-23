@@ -1,4 +1,5 @@
 import { UnauthorizedError } from "../handleErrors/errors.js";
+import { cookieOptions } from "../config/cookie_options";
 
 export class LogoutController{
     static async logout(req, res){
@@ -9,15 +10,23 @@ export class LogoutController{
             if (!user) {
                 throw new UnauthorizedError("No hay sesión activa" )
             }
-    
-            res.clearCookie("access_token").json({ 
-                message: "Logout successful",
-                user: {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name
-                }
-            });
+
+
+             const cookieOptions = {
+            ...cookieOptions,
+            path: "/",
+        };
+
+
+        return res
+        .clearCookie("access_token", cookieOptions)
+        .status(200)
+        .json({
+          message: "Logout successful",
+          user: {
+            email: user.email,
+          },
+        });
 
         }catch(e){
             if(e instanceof UnauthorizedError){

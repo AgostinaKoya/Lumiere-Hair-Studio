@@ -1,6 +1,7 @@
 
 import { LoginModel } from "../models/login.js";
 import { UnauthorizedError, ValidationError, ConnectionError } from "../handleErrors/errors.js";
+import { cookieOptions } from "../config/cookie_options";
 
 export class LoginController {
   static async login(req, res) {
@@ -16,9 +17,7 @@ export class LoginController {
       
       return res
         .cookie("access_token", token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: process.env.NODE_ENV === "production" ? "strict" : "none",
+          ...cookieOptions,
           maxAge: 1000 * 60 * 60,
         })
         .status(200)
