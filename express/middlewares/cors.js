@@ -7,6 +7,7 @@ const ACCEPTED_ORIGINS = [
   'https://lummier-hair-studio-front.vercel.app',
   'https://lummier-hair-studio-ize3yjtlc-koyaagostina-gmailcoms-projects.vercel.app',
   'https://lummier-hair-studio.vercel.app'
+  
 ]
 
 
