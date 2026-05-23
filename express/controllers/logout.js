@@ -1,5 +1,5 @@
 import { UnauthorizedError } from "../handleErrors/errors.js";
-import { cookieOptions } from "../config/cookie_options";
+import { cookieOptions } from "../config/cookie_options.js";
 
 export class LogoutController{
     static async logout(req, res){

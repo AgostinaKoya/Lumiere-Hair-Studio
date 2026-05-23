@@ -1,7 +1,7 @@
 
 import { LoginModel } from "../models/login.js";
 import { UnauthorizedError, ValidationError, ConnectionError } from "../handleErrors/errors.js";
-import { cookieOptions } from "../config/cookie_options";
+import { cookieOptions } from "../config/cookie_options.js";
 
 export class LoginController {
   static async login(req, res) {
